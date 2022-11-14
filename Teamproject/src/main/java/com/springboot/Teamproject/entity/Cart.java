@@ -23,4 +23,6 @@ public class Cart {
     @OneToOne
     @JoinColumn(name="product_id")
     private Product product;    //상품 정보
+
+
 }

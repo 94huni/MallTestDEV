@@ -13,7 +13,7 @@
 
     <h1>상품목록</h1>
     <div th:each="product : ${list}">
-        <a><img src="@{|/${product.imageFileName}|}"></a>
+        <a><img th:src="@{|/img/${product.imageFileName}|}"></a>
         <a th:text="${product.name}" th:href="@{|/product/view/${product.pno}|}"></a>
     </div>
     <div>

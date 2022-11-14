@@ -9,7 +9,7 @@
 
 <div th:each="product : ${productView}">
     <h1 th:text="${product.name}"></h1>
-    <img th:src="@{|/${product.imageFileName}|}">
+    <img th:src="@{|/img/${product.imageFileName}|}">
     <div th:text="${product.price}"></div>
     <div th:text="${product.discription}"></div>
 </div>
