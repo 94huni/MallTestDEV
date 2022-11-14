@@ -12,9 +12,9 @@
 <a sec:authorize="isAuthenticated()" th:href="@{/blog/create}">글쓰기</a>
 
     <h1>상품목록</h1>
-    <div th:each="product : ${productList}">
-        <a><img src="@{|/img/${product.imageFileName}|}"></a>
-        <a th:text="${product.name}" th:href="@{|/product/view/{product.pno}|}"></a>
+    <div th:each="product : ${list}">
+        <a><img src="@{|/${product.imageFileName}|}"></a>
+        <a th:text="${product.name}" th:href="@{|/product/view/${product.pno}|}"></a>
     </div>
     <div>
         <h1>카테고리</h1>

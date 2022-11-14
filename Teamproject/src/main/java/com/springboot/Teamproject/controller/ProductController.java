@@ -46,7 +46,7 @@ public class ProductController {
     public String productCategory(@PathVariable("code")String code, Model model){
         List<Product> categoryProduct  = productService.category(code);
 
-        model.addAttribute("categoryProductList",categoryProduct);
+        model.addAttribute("categoryProduct",categoryProduct);
 
         System.out.println(code);
 

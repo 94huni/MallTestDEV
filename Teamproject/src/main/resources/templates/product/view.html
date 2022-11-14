@@ -7,15 +7,16 @@
 </head>
 <body>
 
-<h1>view.html</h1>
-<h1 th:text="${product.name}"></h1>
-<img th:src="@{|/img/${product.imageFileName}|}">
-<div th:text="${product.price}"></div>
-<div th:text="${product.discription}"></div>
-<a th:href="@{/product/buy}">구매하기</a>
-<a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-<a sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>
-<a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+<div th:each="product : ${productView}">
+    <h1 th:text="${product.name}"></h1>
+    <img th:src="@{|/${product.imageFileName}|}">
+    <div th:text="${product.price}"></div>
+    <div th:text="${product.discription}"></div>
+</div>
+    <!--<a th:href="@{/product/buy}">구매하기</a>-->
+    <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+    <a sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
 
 </body>
 </html>

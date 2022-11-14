@@ -5,10 +5,13 @@
     <title>Title</title>
 </head>
 <body>
+<h1>category.html</h1>
+<div th:each="product : ${categoryProduct}">
 <h1 th:text="${product.code}"></h1>
 <div th:each="product : ${categoryProduct}">
-  <a><img src="@{|/img/${product.imageFileName}|}" th:href="@{|/product/view/${product.pno}|}"></a>
+  <a><img src="@{|/${product.imageFileName}|}" th:href="@{|/product/view/${product.pno}|}"></a>
   <a th:text="${product.name}" th:href="@{|/product/view/${product.pno}|}"></a>
+</div>
 </div>
 </body>
 </html>
