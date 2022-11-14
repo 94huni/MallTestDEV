@@ -12,7 +12,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Page<Product> findByNameContaining(String searchKeyword, Pageable pageable);
 
+    Page<Product> findByPnoOrderByPnoDesc(Product product, Pageable pageable);
 
-    List<Product> findAllBycode(String code);
+
+    List<Product> findAllByCode(String code);
 
 }

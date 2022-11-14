@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+<a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+<a sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/blog/create}">글쓰기</a>
 
+    <h1>상품목록</h1>
+    <div th:each="product : ${productList}">
+        <a><img src="@{|/img/${product.imageFileName}|}"></a>
+        <a th:text="${product.name}" th:href="@{|/product/view/{product.pno}|}"></a>
+    </div>
+    <div>
+        <h1>카테고리</h1>
+        <a th:href="@{/product/shirt}">셔츠</a>
+        <a th:href="@{/product/pants}">바지</a>
+        <a th:href="@{/product/shoes}">신발</a>
+    </div>
 </body>
 </html>

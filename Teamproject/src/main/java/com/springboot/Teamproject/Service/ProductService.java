@@ -4,7 +4,9 @@ import com.springboot.Teamproject.entity.Product;
 import com.springboot.Teamproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,14 @@ public class ProductService {
         return productRepository.findByNameContaining(searchKeyword, pageable);
     }
 
+    public void findAll(Pageable pageable){
+        Product product = new Product();
+        productRepository.findByPnoOrderByPnoDesc(product, pageable);
+    }
+
+    public List<Product> category(String code){
+        return productRepository.findAllByCode(code);
+    }
 
 
 
