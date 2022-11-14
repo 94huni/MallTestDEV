@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify</title>
+</head>
+<body>
+<form th:action="@{|/blog/modify/${board.bno}|}" th:object="${boardCreateForm}" enctype="multipart/form-data" method="post">
+    <label>제목 : </label>
+    <input type="text" th:field="*{title}"><br>
+    내용 : <textarea cols="100" rows="5" th:field="*{content}"></textarea><br>
+    <input type="file" th:field="*{file}">
+    <button type="submit">등록</button>
+    <br>
+</form>
+<img th:unless="${imageFile == null}" th:src="@{|/img/${imageFile.savedName}|}"/>
+<a th:unless="${imageFile == null}" th:href="@{|/blog/imageDelete/${board.bno}|}"><button type="submit">이미지 삭제</button></a>
+</body>
+</html>
