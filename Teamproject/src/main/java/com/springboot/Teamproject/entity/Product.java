@@ -35,4 +35,6 @@ public class Product {
     @OneToOne(mappedBy = "product")
     @ToString.Exclude
     private Cart cart;      //장바구니 정보
+
+
 }

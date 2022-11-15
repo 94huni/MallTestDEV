@@ -23,4 +23,6 @@ public class Purchase {
     private User userprofile;           //유저 정보
 
     private String date;                //구매 날짜
+
+    private int productCount; // 갯수
 }

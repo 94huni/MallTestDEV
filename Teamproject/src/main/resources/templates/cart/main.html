@@ -6,8 +6,16 @@
     <title>Title</title>
 </head>
 <body>
-  <h1>main.html</h1>
-  <div th:each="cart : ${cartList}">
-  </div>
+<h1>main.html</h1>
+<div th:each="cart : ${cartList}">
+    <a th:text="${cart.product.name}" th:href="@{|/product/view/${cart.product.pno}|}"></a>
+    <a th:href="@{|/product/view/${cart.product.pno}|}"><img th:src="@{|/img/${cart.product.imageFileName}|}"></a>
+    <div><!--<input type="number" placeholder="수량입력">-->
+        <!-- <button type="button" th:href="@{|/cart/modify?product_id=${cart.number}&count={cart.productCount}|}"></button>-->
+        <a th:href="@{|/cart/plus/${cart.number}|}"><button>+</button></a>
+        <p th:text="${cart.productCount}"></p>
+        <a th:href="@{|/cart/minus/${cart.number}|}"><button>-</button></a>
+    </div>
+</div>
 </body>
 </html>

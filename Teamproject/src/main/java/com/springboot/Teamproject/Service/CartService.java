@@ -22,6 +22,7 @@ public class CartService {
         Cart cart = new Cart();
         cart.setUserprofile(user);
         cart.setProduct(product);
+        cart.setProductCount(1);
 
         cartRepository.save(cart);
 
@@ -29,6 +30,30 @@ public class CartService {
 
     public List<Cart> getUserCart(User user){
         return cartRepository.findAllByuserprofile(user);
+    }
+
+    public void modifyCart(Cart cart, int count){
+
+        cart.setProductCount(count);
+        cartRepository.save(cart);
+    }
+
+    //수량 1씩 추가
+    public void plusCart(Cart cart){
+        cart.setProductCount(cart.getProductCount()+1);
+        cartRepository.save(cart);
+    }
+    //수량 1씩 감소
+    public void minusCart(Cart cart){
+        if(cart.getProductCount() > 1) {
+            cart.setProductCount(cart.getProductCount() - 1);
+            cartRepository.save(cart);
+        }
+    }
+
+    public Cart getCart(int cart_id){
+
+        return this.cartRepository.findById(cart_id).get();
     }
 
     //장바구니삭제

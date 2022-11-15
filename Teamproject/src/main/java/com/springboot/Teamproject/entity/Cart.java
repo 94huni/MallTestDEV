@@ -17,13 +17,15 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int number;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "User_id")
     private User userprofile;   //유저 정보
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="product_id")
     private Product product;    //상품 정보
+
+    private int productCount; // 갯수
 
 
 }
