@@ -4,8 +4,6 @@ import com.springboot.Teamproject.entity.Cart;
 import com.springboot.Teamproject.entity.Product;
 import com.springboot.Teamproject.entity.User;
 import com.springboot.Teamproject.repository.CartRepository;
-import com.springboot.Teamproject.repository.ProductRepository;
-import com.springboot.Teamproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +16,24 @@ public class CartService {
     @Autowired
     CartRepository cartRepository;
 
+    //제품정보 장바구니 저장
+    public void savedCart (Product product, User user){
 
-    public Cart savedCart (Product product){
-        Cart cart = savedCart(product);
-        return cartRepository.save(cart);
+        Cart cart = new Cart();
+        cart.setUserprofile(user);
+        cart.setProduct(product);
+
+        cartRepository.save(cart);
+
     }
 
-    public List<Cart> getCart(Product product){
-        return getCart(product);
+    public List<Cart> getUserCart(User user){
+        return cartRepository.findAllByuserprofile(user);
     }
 
-    public void deleteCart(Product product){
+    //장바구니삭제
+    public void deleteCart(int number){
 
-        this.cartRepository.delete(product.getCart());
-
-
+        cartRepository.deleteById(number);
     }
 }
