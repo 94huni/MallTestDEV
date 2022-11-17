@@ -1,10 +1,12 @@
 package com.springboot.Teamproject.service;
 
+import com.springboot.Teamproject.entity.ImageFile;
 import com.springboot.Teamproject.repository.ImageFileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -12,6 +14,10 @@ public class ImageFileService {
 
     private final ImageFileRepository imageFileRepository;
 
+    public List<ImageFile> getImageFiles(int bno){
+
+        return this.imageFileRepository.findAllByboardBno(bno);
+    }
     public void delete(int fno){
 
         //해당 이미지 파일 정보의 경로 정보를 가져옴

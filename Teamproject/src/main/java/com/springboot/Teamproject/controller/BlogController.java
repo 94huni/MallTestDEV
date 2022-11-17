@@ -1,6 +1,7 @@
 package com.springboot.Teamproject.controller;
 
 import com.springboot.Teamproject.DTO.BoardCreateForm;
+import com.springboot.Teamproject.DTO.BoardSearchForm;
 import com.springboot.Teamproject.entity.BlogBoard;
 import com.springboot.Teamproject.entity.Comment;
 import com.springboot.Teamproject.entity.ImageFile;
@@ -10,6 +11,7 @@ import com.springboot.Teamproject.service.CommentService;
 import com.springboot.Teamproject.service.ImageFileService;
 import com.springboot.Teamproject.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -41,51 +43,74 @@ public class BlogController {
 
     //게시판 목록 기능
     @GetMapping("/list")
-    public String getBlogBoardList(Model model){
-        List<BlogBoard> blogBoardList = this.boardService.getList();
-        if(!blogBoardList.isEmpty())
-        {
-            //html 에서 정보를 가져오기 위해 연동 시켜주는 모델
-            model.addAttribute("blogBoardList",blogBoardList);
+    public String getBlogBoardList(Model model , BoardSearchForm boardSearchForm, Principal principal ,
+                                   @RequestParam(value = "page", defaultValue = "0") int pageNumber, @RequestParam(value = "size", defaultValue = "5") int pageSize){
 
-            //가장 최근에 올라온 게시글의 정보를 받아옴
-            int recentBno = blogBoardList.get(0).getBno();
-
-            //게시글 번호를 통해 정보를 받아온뒤 모델과 연동
-            BlogBoard blogBoard = this.boardService.getBlog(recentBno);
-            model.addAttribute("blogBoard",blogBoard);
-
-            //게시글 번호를 통해 파일 정보 목록을 가져온 뒤 모델과 연동
-            List<ImageFile> fileList = this.boardService.getImageFiles(recentBno);
-            model.addAttribute("fileList",fileList);
-
-            //게시글 번호를 통해 댓글 정보 목록을 가져온 뒤 모델과 연동
-            List<Comment> commentList = this.commentService.getList(recentBno);
-            model.addAttribute("commentList",commentList);
-
-            return "blog_main";     //해당 이름을 가진 홈페이지로 이동
-        }
-        else{       //게시글이 하나도 없을 경우 다른 홈페이지로 이동
+        if (principal == null)
             return "blog_emptiedMain";
+        else {
+            Page<BlogBoard> blogBoardPage = this.boardService.getList(principal.getName(),pageNumber,pageSize);
+
+            if (blogBoardPage.isEmpty())
+                return "blog_emptiedMain";
+            else {
+                //블로그 게시글 페이지 연동
+                model.addAttribute("pageList",blogBoardPage);
+                //블로그 게시글 목록 연동
+                model.addAttribute("blogBoardList",blogBoardPage.getContent());
+
+                //가장 최근에 올라온 게시글의 정보를 받아옴
+                int recentBno = blogBoardPage.getContent().get(0).getBno();
+
+                //게시글 번호를 통해 정보를 받아온뒤 모델과 연동
+                BlogBoard blogBoard = this.boardService.getBlog(recentBno);
+                model.addAttribute("blogBoard",blogBoard);
+
+                //게시글 번호를 통해 파일 정보 목록을 가져온 뒤 모델과 연동
+                List<ImageFile> fileList = this.imageFileService.getImageFiles(recentBno);
+                model.addAttribute("fileList",fileList);
+
+                //게시글 번호를 통해 댓글 정보 목록을 가져온 뒤 모델과 연동
+                List<Comment> commentList = this.commentService.getList(recentBno);
+                model.addAttribute("commentList",commentList);
+
+                return "blog_main";     //해당 이름을 가진 홈페이지로 이동
+            }
         }
     }
 
     //게시글 목록에서 제목을 클릭했을 때 해당 번호의 게시글 정보를 가져오기 위한 매핑
     @GetMapping("/list/{bno}")
-    public String getBlogBoardList(Model model,@PathVariable("bno") int bno){
-        List<BlogBoard> blogBoardList = this.boardService.getList();
-        model.addAttribute("blogBoardList",blogBoardList);
+    public String getBlogBoardList(Model model , @PathVariable("bno") int bno ,BoardSearchForm boardSearchForm, Principal principal ,
+                                   @RequestParam(value = "page", defaultValue = "0") int pageNumber, @RequestParam(value = "size", defaultValue = "5") int pageSize){
 
-        BlogBoard blogBoard = this.boardService.getBlog(bno);
-        model.addAttribute("blogBoard",blogBoard);
+        if (principal == null)
+            return "blog_emptiedMain";
+        else {
+            Page<BlogBoard> blogBoardPage = this.boardService.getList(principal.getName(),pageNumber,pageSize);
 
-        List<ImageFile> fileList = this.boardService.getImageFiles(bno);
-        model.addAttribute("fileList",fileList);
+            if (blogBoardPage.isEmpty())
+                return "blog_emptiedMain";
+            else {
+                model.addAttribute("pageList",blogBoardPage);
+                //html 에서 정보를 가져오기 위해 연동 시켜주는 모델
+                model.addAttribute("blogBoardList",blogBoardPage.getContent());
 
-        List<Comment> commentList = this.commentService.getList(bno);
-        model.addAttribute("commentList",commentList);
+                //게시글 번호를 통해 정보를 받아온뒤 모델과 연동
+                BlogBoard blogBoard = this.boardService.getBlog(bno);
+                model.addAttribute("blogBoard",blogBoard);
 
-        return "blog_main";
+                //게시글 번호를 통해 파일 정보 목록을 가져온 뒤 모델과 연동
+                List<ImageFile> fileList = this.imageFileService.getImageFiles(bno);
+                model.addAttribute("fileList",fileList);
+
+                //게시글 번호를 통해 댓글 정보 목록을 가져온 뒤 모델과 연동
+                List<Comment> commentList = this.commentService.getList(bno);
+                model.addAttribute("commentList",commentList);
+
+                return "blog_main";     //해당 이름을 가진 홈페이지로 이동
+            }
+        }
     }
 
     //게시글 생성 홈페이지로 이동
@@ -115,7 +140,7 @@ public class BlogController {
     public String blogBoardModify(BoardCreateForm boardCreateForm,@PathVariable Integer bno, Model model, Principal principal){
 
         BlogBoard board = this.boardService.getBlog(bno);
-        List<ImageFile> fileList = this.boardService.getImageFiles(bno);
+        List<ImageFile> fileList = this.imageFileService.getImageFiles(bno);
 
         if(!board.getUserprofile().getId().equals(principal.getName())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정 권한이 없습니다.");
@@ -156,7 +181,7 @@ public class BlogController {
     @GetMapping("/imageDelete/{bno}")
     public String blogBoardImageDelete(@PathVariable Integer bno){
 
-        this.imageFileService.delete(this.boardService.getImageFiles(bno).get(0).getFno());
+        this.imageFileService.delete(this.imageFileService.getImageFiles(bno).get(0).getFno());
 
         return "redirect:/blog/modify/"+bno;
     }
@@ -173,5 +198,47 @@ public class BlogController {
         this.boardService.deleteBlog(board);
 
         return "redirect:/";
+    }
+
+    @PostMapping("/search")
+    public String blogBoardSearch(Model model, @Valid BoardSearchForm boardSearchForm, BindingResult bindingResult, Principal principal ,
+                                  @RequestParam(value = "page", defaultValue = "0") int pageNumber, @RequestParam(value = "size", defaultValue = "5") int pageSize){
+
+        if(bindingResult.hasErrors())
+            return "blog_main";
+
+        if (principal == null)
+            return "blog_emptiedMain";
+        else {
+            Page<BlogBoard> blogBoardPage = this.boardService.getSearchBoardList(principal.getName(), boardSearchForm.getSearch(),pageNumber,pageSize);
+
+            if(!blogBoardPage.isEmpty())
+            {
+                model.addAttribute("pageList",blogBoardPage);
+                //html 에서 정보를 가져오기 위해 연동 시켜주는 모델
+                model.addAttribute("searchBoardList",blogBoardPage.getContent());
+
+                //가장 최근에 올라온 게시글의 정보를 받아옴
+                int recentBno = blogBoardPage.getContent().get(0).getBno();
+
+                //게시글 번호를 통해 정보를 받아온뒤 모델과 연동
+                BlogBoard blogBoard = this.boardService.getBlog(recentBno);
+                model.addAttribute("blogBoard",blogBoard);
+
+                //게시글 번호를 통해 파일 정보 목록을 가져온 뒤 모델과 연동
+                List<ImageFile> fileList = this.imageFileService.getImageFiles(recentBno);
+                model.addAttribute("fileList",fileList);
+
+                //게시글 번호를 통해 댓글 정보 목록을 가져온 뒤 모델과 연동
+                List<Comment> commentList = this.commentService.getList(recentBno);
+                model.addAttribute("commentList",commentList);
+
+                return "blog_main";     //해당 이름을 가진 홈페이지로 이동
+            }
+            else{       //게시글이 하나도 없을 경우 다른 홈페이지로 이동
+                return "blog_emptiedMain";
+            }
+        }
+
     }
 }

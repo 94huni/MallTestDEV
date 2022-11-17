@@ -5,9 +5,12 @@ import com.springboot.Teamproject.entity.ImageFile;
 import com.springboot.Teamproject.entity.User;
 import com.springboot.Teamproject.repository.BlogBoardRepository;
 import com.springboot.Teamproject.repository.ImageFileRepository;
+import com.springboot.Teamproject.repository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +32,10 @@ public class BlogBoardService {
 
     private final ImageFileRepository imageFileRepository;
 
+    private final UserRepository userRepository;
+
     @Value("${file.dir}")
-    private String fileDir;     //aplication.properties 에 있는 파일 경로 변수 저장
+    private String fileDir;     //application.properties 에 있는 파일 경로 변수 저장
 
     //게시판 글 생성
     public void create(String title, String content,  MultipartFile files,User user) throws IOException {
@@ -70,9 +75,14 @@ public class BlogBoardService {
         }
     }
 
-    //게시판 글 목록을 게시판 번호 내림차순으로 가져옴
-    public List<BlogBoard> getList(){
-        return this.boardRepository.findAll(Sort.by(Sort.Direction.DESC,"bno"));
+    //접속한 유저의 정보를 바탕으로 게시판 번호 내림차순으로 게시판 글 목록을 가져옴
+    public Page<BlogBoard> getList(String user_id, int pageNumber, int pageSize){
+
+        User user = this.userRepository.getById(user_id);
+
+        Sort sort = Sort.by("bno").descending();
+
+        return this.boardRepository.findAllByUserprofile(user, PageRequest.of(pageNumber,pageSize,sort));
     }
 
     //해당 번호의 게시판을 직접 가져옴
@@ -164,13 +174,16 @@ public class BlogBoardService {
             file.delete();
         }
 
-
         this.boardRepository.delete(board);
     }
 
-    //해당 번호의 게시판에 등록된 이미지 파일 정보를 가져옴
-    public List<ImageFile> getImageFiles(int bno){
+    //제목 검색 기능
+    public Page<BlogBoard> getSearchBoardList(String user_id , String search, int pageNumber, int pageSize){
 
-        return this.imageFileRepository.findAllByboardBno(bno);
+        User user = this.userRepository.getById(user_id);
+
+        Sort sort = Sort.by("bno").descending();
+
+        return this.boardRepository.findAllByUserprofileAndTitleContaining(user,search, PageRequest.of(pageNumber,pageSize,sort));
     }
 }
