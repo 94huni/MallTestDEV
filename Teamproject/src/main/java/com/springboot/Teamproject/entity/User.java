@@ -29,7 +29,7 @@ public class User {
     @NotBlank
     private String nickname;    //닉네임
 
-    @OneToOne(mappedBy = "userprofile", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "userprofile", cascade = CascadeType.REMOVE)
     private Cart cart;      //장바구니 정보
 
     @OneToMany(mappedBy = "userprofile", cascade = CascadeType.REMOVE)

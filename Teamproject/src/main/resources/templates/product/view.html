@@ -11,7 +11,7 @@
     <h1 th:text="${product.name}"></h1>
     <img th:src="@{|/img/${product.imageFileName}|}">
     <div th:text="${product.price}"></div>
-    <div th:text="${product.discription}"></div>
+    <div th:text="${product.description}"></div>
 </div>
     <!--<a th:href="@{/product/buy}">구매하기</a>-->
     <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>

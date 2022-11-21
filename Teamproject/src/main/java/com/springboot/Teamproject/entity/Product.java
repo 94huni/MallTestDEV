@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class Product {
     private int price;    //상품 가격
 
     @Column(nullable = false)
-    private String discription;  //상품 정보
+    private String description;  //상품 정보
 
     @Column(nullable = false)
     private String imageFileName; //상품 이미지 파일이름
@@ -32,9 +33,13 @@ public class Product {
     @Column(nullable = false)
     private String code;    //카테고리 코드
 
-    @OneToOne(mappedBy = "product")
+    @OneToMany(mappedBy = "product")
     @ToString.Exclude
-    private Cart cart;      //장바구니 정보
+    private List<Cart> cartList;      //장바구니 정보
+
+    @OneToMany(mappedBy = "product")
+    @ToString.Exclude
+    private List<Purchase> purchaseList;    //주문 내역 정보
 
 
 }

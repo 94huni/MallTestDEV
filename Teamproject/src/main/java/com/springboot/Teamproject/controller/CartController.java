@@ -31,6 +31,12 @@ public class CartController {
 
         List<Cart> cart = this.cartService.getUserCart(user); //유저정보의 장바구니정보 가져오기
 
+        int totalPrice = 0;
+        for(int i=0; i<cart.size();i++){
+            totalPrice += cart.get(i).getProduct().getPrice() * cart.get(i).getProductCount();
+        }
+        model.addAttribute("totalPrice", totalPrice);
+
         model.addAttribute("cartList", cart);
         return "cart/main";
     }
