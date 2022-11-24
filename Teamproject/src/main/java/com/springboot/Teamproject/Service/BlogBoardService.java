@@ -1,5 +1,6 @@
 package com.springboot.Teamproject.service;
 
+import com.springboot.Teamproject.UserRole;
 import com.springboot.Teamproject.entity.BlogBoard;
 import com.springboot.Teamproject.entity.ImageFile;
 import com.springboot.Teamproject.entity.User;
@@ -83,6 +84,20 @@ public class BlogBoardService {
         Sort sort = Sort.by("bno").descending();
 
         return this.boardRepository.findAllByUserprofile(user, PageRequest.of(pageNumber,pageSize,sort));
+    }
+
+    //접속한 유저의 가장 최근 올린 게시글을 가져옴
+    public BlogBoard getRecentBlog(String user_id){
+
+        User user = this.userRepository.getById(user_id);
+
+        Optional<BlogBoard> board = this.boardRepository.findFirstByUserprofileOrderByBnoDesc(user);
+
+        if(board.isPresent())
+            return board.get();
+        else
+            return null;
+
     }
 
     //해당 번호의 게시판을 직접 가져옴

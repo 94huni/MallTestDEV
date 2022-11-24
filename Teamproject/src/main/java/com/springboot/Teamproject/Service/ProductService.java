@@ -1,4 +1,4 @@
-package com.springboot.Teamproject.Service;
+package com.springboot.Teamproject.service;
 
 import com.springboot.Teamproject.entity.Product;
 import com.springboot.Teamproject.repository.ProductRepository;
@@ -17,19 +17,20 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public Page<Product> getList(Pageable pageable){
+    //findAll메서드에 pageable을 변수로 받아와서 제품의 전체리스트를 받아온다.
+    public Page<Product> getList(int pageNumber){
 
-
-        return this.productRepository.findAll(pageable);
+        return productRepository.findAll( PageRequest.of(pageNumber,12));
     }
 
+    //getById메서드에 제품번호를 변수로 받아 상품정보를 받아온다.
     public Product getProduct(int pno){
-
-        return this.productRepository.getById(pno);
+        return productRepository.getById(pno);
     }
 
-    public Page<Product> searchProduct(Pageable pageable, String searchKeyword){
-        return productRepository.findByNameContaining(searchKeyword, pageable);
+    //검색어와
+    public Page<Product> searchProduct(String searchKeyword, Pageable pageable){
+        return productRepository.findByNameContaining(searchKeyword,pageable);
     }
 
     public void findAll(Pageable pageable){
@@ -37,9 +38,10 @@ public class ProductService {
         productRepository.findByPnoOrderByPnoDesc(product, pageable);
     }
 
-    public List<Product> category(String code){
-        return productRepository.findAllByCode(code);
+    public Page<Product> category(String code,int pageNumber){
+        return productRepository.findAllByCode(code, PageRequest.of(pageNumber,12));
     }
+
 
 
 

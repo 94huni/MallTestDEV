@@ -12,6 +12,7 @@
     <img th:src="@{|/img/${product.imageFileName}|}">
     <div th:text="${product.price}"></div>
     <div th:text="${product.description}"></div>
+    <a th:href="@{|/cart/${product.pno}|}">장바구니등록</a>
 </div>
     <!--<a th:href="@{/product/buy}">구매하기</a>-->
     <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>

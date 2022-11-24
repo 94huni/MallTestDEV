@@ -35,7 +35,7 @@ public class CommentController {
 
         this.commentService.create(commentCreateForm.getComment(),user,commentCreateForm.getBno());
 
-        return "redirect:/";
+        return "redirect:/blog/detail/"+commentCreateForm.getBno();
     }
 
 
@@ -50,6 +50,6 @@ public class CommentController {
 
         this.commentService.delete(cno);
 
-        return "redirect:/blog/list/"+bno;
+        return "redirect:/blog/detail/"+bno;
     }
 }

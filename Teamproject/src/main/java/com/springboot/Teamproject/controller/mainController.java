@@ -10,6 +10,6 @@ public class mainController {
     @GetMapping("/")
     public String root(){
 
-        return "redirect:/blog/list/";
+        return "redirect:/product";
     }
 }

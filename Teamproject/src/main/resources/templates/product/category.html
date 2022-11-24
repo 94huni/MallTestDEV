@@ -1,16 +1,133 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Title</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <!-- Bootstrap icons-->
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css}" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/css/style_product.css}" rel="stylesheet" />
 </head>
-<body>
-<h1>category.html</h1>
-<table th:each="product : ${categoryProduct}">
-    <tr>
-        <td><img th:src="@{|/img/${product.imageFileName}|}"></td>
-        <td><a th:text="${product.name}" th:href="@{|/product/view/${product.pno}|}"></a></td>
-    </tr>
-</table>
+<style>
+   #product-image {object-fit: cover; height : 300px;}
+  .image-box {width: 100%;}
+  .image-box .image-box-wrap {overflow: hidden;}
+  .card-img-top {width: 100%; height: auto;}
+  .image-box img:hover {transform: scale(1.2, 1.2); transition-duration: 0.5s;}
+  .image-box img {transition-duration: 0.3s;}
+</style>
+<body> <!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <!--        <a class="navbar-brand" href="#!">Shop</a>-->
+        <a class="navbar-brand" th:href="@{/product}"><img th:src="@{/img/logo.png}" width="400px" height="150px"> </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/product}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/blog/list}">Blog</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Category</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/product}">All Products</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" th:href="@{/product/top}">Top</a></li>
+                        <li><a class="dropdown-item" th:href="@{/product/pants}">Pants</a></li>
+                        <li><a class="dropdown-item" th:href="@{/product/shoes}">Shoes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item "><a class="nav-link " sec:authorize="isAnonymous()" th:href="@{/user/login}">Login</a></li>
+                <li class="nav-item"><a class="nav-link " sec:authorize="isAuthenticated()" th:href="@{/user/logout}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link " sec:authorize="isAuthenticated()" th:href="@{/blog/create}">글쓰기</a></li>
+                <li class="nav-item"><a class="nav-link " sec:authorize="isAuthenticated()" th:href="@{/purchase/buy}">구매목록</a></li>
+            </ul>
+                <a th:href="@{/cart}">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                </button>
+                </a>
+        </div>
+    </div>
+</nav>
+
+<!--ProductList-->
+
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5" >
+        <h2 class="fw-bolder mb-4">카테고리</h2>
+
+        <div class="btn-group ml-5">
+            <a th:href="@{/product}"><button type="button" class="btn btn-success">All Products</button></a>&nbsp&nbsp
+            <a th:href="@{/product/top}"><button type="button" class="btn btn-secondary">Top</button></a>&nbsp&nbsp
+            <a th:href="@{/product/outer}"><button type="button" class="btn btn-secondary">Outer</button></a>&nbsp&nbsp
+            <a th:href="@{/product/pants}"><button type="button" class="btn btn-secondary">Pants</button></a>&nbsp&nbsp
+            <a th:href="@{/product/shoes}"><button type="button" class="btn btn-secondary">Shoes</button></a>&nbsp&nbsp
+
+        </div><br><br>
+
+        <div class="input-group mb-3">
+            <form th:action="@{|/product/search|}" method="post" role="search">
+                <input type="text" class="form-control" name="searchKeyword" placeholder="Search"  ><br>
+                <button class="btn btn-success" type="submit" style="float:right">검색</button>
+            </form>
+        </div>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="col mb-5" th:each="product : ${productList}">
+                <div class="card h-100">
+                    <!-- Product image-->
+                    <div class="image-box">
+                        <div class="image-box-wrap">
+                            <img class="card-img-top" id="product-image" th:src="@{|/img/${product.imageFileName}|}" alt="..." />
+                        </div>
+                    </div>
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder" th:text="${product.name}">Fancy Product</h5>
+                            <!-- Product price-->
+<!--                            <br>-->
+<!--                            <h6 class="fw" th:text="${product.price}+'원'"></h6>-->
+
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{|/product/view/${product.pno}|}">View</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <ul class="pagination pagination-lg justify-content-center">
+        <li class="page-item" th:classappend="${prevPage==0} ? 'disabled'"><a class="page-link" th:href="@{|/product/${code}?page=${prevPage-1}|}">Previous</a></li>
+        <th:block th:each="page:${#numbers.sequence(0,productPage.totalPages-1)}">
+            <li class="page-item"><a class="page-link" th:if="${page!=nowPage-1}" th:text="${page+1}" th:href="@{|/product/${code}?page=${page}|}"></a></li>
+            <li class="page-item active"><a class="page-link" th:if="${page==nowPage-1}" th:text="${page+1}"></a></li>
+        </th:block>
+        <li class="page-item" th:classappend="${afterPage==endPage} ? 'disabled'"><a class="page-link" th:href="@{|/product/${code}?page=${afterPage-1}|}">Next</a></li>
+    </ul>
+
+</section>
+
+
+
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js}"></script>
+<!-- Core theme JS-->
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

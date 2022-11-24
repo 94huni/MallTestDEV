@@ -14,4 +14,6 @@ public interface BlogBoardRepository extends JpaRepository<BlogBoard, Integer> {
     Page<BlogBoard> findAllByUserprofile(User user, Pageable pageable);
 
     Page<BlogBoard> findAllByUserprofileAndTitleContaining(User user, String search, Pageable pageable);
+
+    Optional<BlogBoard> findFirstByUserprofileOrderByBnoDesc(User user);
 }

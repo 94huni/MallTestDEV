@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>buy.html</h1>
+    <div th:each="getList :${getList}">
+        <div>제품명 :<span th:text="${getList.product.name}"></span></div>
+        <div>주문번호 : <span th:text="${getList.purchaseNumber}"></span></div>
+        <div>개수 : <span th:text="${getList.productCount}"></span></div>
+        <img th:src="@{|/img/${getList.product.imageFileName}|}">
+    </div>
+</body>
+</html>

@@ -32,9 +32,9 @@ public class BlogBoard {
     @NotBlank
     private String writer;    //작성자
 
-    @OneToOne(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @ToString.Exclude
-    private ImageFile file;     //이미지 파일 정보
+    private List<ImageFile> fileList;     //이미지 파일 정보
     
     private String createDate;  //생성 날짜
 

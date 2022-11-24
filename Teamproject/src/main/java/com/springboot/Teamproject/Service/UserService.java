@@ -37,6 +37,12 @@ public class UserService {
         else
             throw new DataNotFoundException("유저를 찾을 수 없습니다");
     }
+
+    //유저가 존재하는지 여부
+    public boolean isUser(String id){
+
+        return this.userRepository.existsById(id);
+    }
     
     //기존 유저의 정보 변경
     public void modifyUser(User user, String id, String password, String nickname){

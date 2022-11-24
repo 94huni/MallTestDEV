@@ -14,10 +14,12 @@ public class ImageFileService {
 
     private final ImageFileRepository imageFileRepository;
 
+    //해당 번호의 게시판에 등록된 이미지 파일 정보를 가져옴
     public List<ImageFile> getImageFiles(int bno){
 
         return this.imageFileRepository.findAllByboardBno(bno);
     }
+
     public void delete(int fno){
 
         //해당 이미지 파일 정보의 경로 정보를 가져옴

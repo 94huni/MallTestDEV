@@ -36,7 +36,7 @@ public class CommentService {
     //해당 번호의 게시글에 등록된 댓글 목록 가져옴
     public List<Comment> getList(int bno){
 
-        return this.commentRepository.findByboardBno(bno);
+        return this.commentRepository.findAllByboardBno(bno);
     }
 
     //댓글 삭제
@@ -48,6 +48,6 @@ public class CommentService {
     //댓글정보를 가져옴
     public Comment getComment(int cno){
 
-        return this.commentRepository.findById(cno);
+        return this.commentRepository.findById(cno).get();
     }
 }

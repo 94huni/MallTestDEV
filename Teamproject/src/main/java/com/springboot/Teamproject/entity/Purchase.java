@@ -9,6 +9,7 @@ import javax.persistence.*;
 public class Purchase {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long purchaseNumber;        //주문 번호
 
     @ManyToOne
@@ -21,5 +22,5 @@ public class Purchase {
 
     private String date;                //구매 날짜
 
-    private int productCount; // 갯수
+    private int productCount;           //구매한 상품 갯수
 }

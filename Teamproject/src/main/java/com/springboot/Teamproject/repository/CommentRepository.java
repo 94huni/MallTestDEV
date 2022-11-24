@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment,Integer> {
 
-    List<Comment> findByboardBno(int bno);
-    Comment findById(int cno);
+    List<Comment> findAllByboardBno(int bno);
 }

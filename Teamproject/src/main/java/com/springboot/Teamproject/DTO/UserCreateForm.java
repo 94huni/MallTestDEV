@@ -11,10 +11,9 @@ public class UserCreateForm {
 
     private String id;      //아이디
 
-    @Size(min = 8, max = 15)
+    @Size(min = 8, max = 15, message = "비밀번호는 최소 8글자 이상이어야 합니다")
     private String password1;   //비밀번호
 
-    @Size(min = 8, max = 15)
     private String password2;   //비밀번호 확인
 
     private String nickname;    //닉네임

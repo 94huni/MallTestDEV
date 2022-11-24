@@ -29,8 +29,8 @@ public class User {
     @NotBlank
     private String nickname;    //닉네임
 
-    @OneToMany(mappedBy = "userprofile", cascade = CascadeType.REMOVE)
-    private Cart cart;      //장바구니 정보
+    @OneToMany(mappedBy = "userprofile")
+    private List<Cart> cartList;      //장바구니 정보
 
     @OneToMany(mappedBy = "userprofile", cascade = CascadeType.REMOVE)
     @ToString.Exclude
@@ -41,6 +41,6 @@ public class User {
     private List<Comment> commentList;  //댓글 일대다 관계
 
     @OneToMany(mappedBy = "userprofile" ,cascade = CascadeType.REMOVE)
-    private List<Purchase> purchaseList;    //주문 정보 일대다 관계
+    private List<Purchase> purchaseList;    //주문 내역 정보 일대다 관계
 
 }

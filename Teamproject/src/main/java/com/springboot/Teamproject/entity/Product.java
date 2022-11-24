@@ -40,6 +40,4 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @ToString.Exclude
     private List<Purchase> purchaseList;    //주문 내역 정보
-
-
 }
